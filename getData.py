@@ -1,9 +1,34 @@
+from typing import List
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import streamlit as st
 import pandas as pd
 import re
 
+def showData(text, question):
+        
+        #text = [re.findall(r'\b\S+\b', text) ]
+        df2 = pd.DataFrame()
+       
+        #st.write(question)
+        featuresArr = []
+        newTxt = ""
+        for char in text:
+            if char in "-,0123456789%":
+                if newTxt:
+                    featuresArr.append(newTxt.replace("total respondents", ""))
+                newTxt = ""
+            else:
+                newTxt += char
+        #st.text(newTxt)
+        precent = re.findall('\d*%', text)
+        st.write(precent) 
+        
+        for index in range(len(featuresArr)):
+            
+            df2[featuresArr[index]] = [precent[index]]
+        st.header(question)
+        st.table(df2)
 # url = "https://outlook.office.com/mail/inbox/id/AAQkADBkNjEyZTIzLWFjYzYtNDI4NS1iYTFjLTAzZjk1MDMxOTY0MAAQAKi4CQlarU5HneqQvTFe908%3D"
 
 # content = urlopen(url).read()
@@ -12,33 +37,93 @@ f = open("./websiteHTML.html", "r")
 soup = BeautifulSoup(f.read()) 
 
 # print(soup.prettify())
-df = pd.DataFrame()
-texts = []
-for text in soup.find_all("div", {"class": "exit-polls-generalsstyles__ExitPollCardBackground-sc-1takans-29 bxkxsr"}):
-
-    texts.append(text.get_text())
-df["raw"] = texts
 
 
-st.table(df)
-
-for raw in df["raw"]:
-    try:
-        question = raw.split("?")[0]
-        text = raw.split("?")[1]
-        res = [re.findall(r'\b\S+\b', text) ]
+for div in soup.find_all("div", {"class": "exit-polls-generalsstyles__ExitPollCardBackground-sc-1takans-29 bxkxsr"}):
+    featuresArr = []
+    texts = []
+    questions = []
+    biden = []
+    trump = []
+    none = []
+    
+    # df["Candidate"] = ["Biden", "Trump"]
+    for text in div.find_all("div", {"class": "bNbmto"}):
        
-       
-        st.write(question)
-        newTxt = ""
-        for char in text:
-            if char in "0123456789%":
+            featuresArr.append(text.text)
+        
+      
+    index = 0
+    
+    
+    st.write(div.text)
+    
+    precents =  div.text.split("Biden")[1]
+    st.write(precents)
+    bidenPrecent =  precents.split("Trump")[0]
+    trumpPrecent =  precents.split("Trump")[1]
+
+    precentsB = re.findall('\d*%', bidenPrecent)
+    precentsT = re.findall('\d*%', trumpPrecent)
+    
+
+    #     none.append(text.text)
+    # for text in div.find_all("td", {"class": "bDkkGs"}):
+    #     trump.append(text.text)
+    # for text in div.find_all("td", {"class": "hWSzXd"}):
+    #     biden.append(text.text)
+            # if index % 2 == 0:
                 
-                newTxt += " "
-            else:
-                newTxt += char
-        st.text(newTxt)
-        precent = re.findall('\d*%', text)
-        st.write(precent)    
-    except:
-        print(1)
+            #     precentages.append(text.text)
+            #     # st.write(precentages)
+            # else:
+            #      precentages.append(text.text)
+            #     # st.write(precentages)
+            
+        
+            
+            # index += 1
+    for text in div.find_all("div", {"class": "sPzuG"}):
+        questions.append(text.text)
+    
+
+        
+            
+        # for index in range(len(featuresArr)):
+        #     columns = []
+        #     try:
+        #         columns = [precentages[index]]
+        #         # st.write(df[featuresArr[index]])
+                
+        #     except:
+        #         print(1)
+        #     = columns
+    st.header(text.text) 
+    st.write(precentsB)
+    st.write(precentsT)
+    st.write(none)
+    st.write(featuresArr)
+    df = pd.DataFrame()
+    for index in range(len(featuresArr)):
+         df[featuresArr[index]] = [precentsB[index], precentsT[index]]
+    st.table(df)
+        
+        
+    
+
+    # df["Precentages"] = p
+        
+   
+
+
+
+
+questions = []
+tableIndex = 0
+
+
+# for raw in df["raw"]:
+#     df2 = pd.DataFrame()
+    
+#     tableIndex += 1
+
