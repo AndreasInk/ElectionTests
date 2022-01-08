@@ -57,15 +57,28 @@ for div in soup.find_all("div", {"class": "exit-polls-generalsstyles__ExitPollCa
     
     
     st.write(div.text)
+    try:
+        precents =  div.text.split("Biden")[1]
+        st.write(precents)
     
-    precents =  div.text.split("Biden")[1]
-    st.write(precents)
-    bidenPrecent =  precents.split("Trump")[0]
-    trumpPrecent =  precents.split("Trump")[1]
-
+        st.write(div.text.split("Biden")[0])
+        if "Joe" in  div.text.split("Biden")[0]:
+            precents =  div.text.split("Biden")[1].split("Biden")[0]
+            st.write(precents)
+            bidenPrecent =  precents.split("Trump")[0]
+            #trumpPrecent =  precents.split("Trump")[1]
+        else:
+            bidenPrecent =  precents.split("Trump")[0]
+            trumpPrecent =  precents.split("Trump")[1]
+    except:
+        print()
     precentsB = re.findall('\d*%', bidenPrecent)
     precentsT = re.findall('\d*%', trumpPrecent)
-    
+    if "n/a" in bidenPrecent:
+        precentsB.append("0%")
+
+    if "n/a" in trumpPrecent:
+        precentsT.append("0%")
 
     #     none.append(text.text)
     # for text in div.find_all("td", {"class": "bDkkGs"}):
@@ -104,9 +117,14 @@ for div in soup.find_all("div", {"class": "exit-polls-generalsstyles__ExitPollCa
     st.write(none)
     st.write(featuresArr)
     df = pd.DataFrame()
+    df["Candidate"] = ["Biden", "Trump"]
     for index in range(len(featuresArr)):
-         df[featuresArr[index]] = [precentsB[index], precentsT[index]]
+        try:
+            df[featuresArr[index]] = [precentsB[index], precentsT[index]]
+        except:
+            print()
     st.table(df)
+    df.to_csv("./data/" + text.text + ".csv")
         
         
     
