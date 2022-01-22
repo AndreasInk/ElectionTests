@@ -36,32 +36,57 @@ st.write(locations)
 
 df = pd.DataFrame()
 for location in locations:
-    st.write(location)
-    tmpDf = pd.read_csv(location)
-    tmpDf = tmpDf.drop(columns=["Unnamed: 0"])
-    tmpDf["Candidate"] = [
-        1 if item == "Trump" else 0 for item in list(tmpDf["Candidate"])
-    ]
-    st.table(tmpDf)
-    labels = np.array(tmpDf["Candidate"])
+    if "Main" not in location:
+        st.write(location)
+        tmpDf = pd.read_csv(location)
+        #tmpDf = tmpDf.drop(columns=["Candidate"])
+        tmpDf = tmpDf.drop(columns=["Unnamed: 0"])
     
-    for feature in tmpDf.columns:
-        cleanBiden = str(tmpDf[feature][0]).replace("%", "")
-        cleanTrump = str(tmpDf[feature][1]).replace("%", "")
-        
-        biden = int(cleanBiden) - int(cleanTrump)
-        trump = int(cleanTrump) - int(cleanBiden)
-        tmpDf[feature] = [biden, trump]
+        tmpDf["Candidate"] = [
+            1 if item == "Trump" else 0 for item in list(tmpDf["Candidate"])
+        ]
         st.table(tmpDf)
     
-    df = np.array(tmpDf)
-    train_features, test_features, train_labels, test_labels = train_test_split(
-        df, labels, test_size=0.25, random_state=42
-    )
-    feature_list = [i for i in list(tmpDf.columns) if i != "Candidate"]
-    tmpDf = tmpDf.drop(columns=["Candidate"])
-    title = location.replace("./data/", "").replace(".csv", "")
-    train_model(tmpDf[feature_list], labels, tmpDf[feature_list], df, title)
+        title = location.replace("./data/", "").replace(".csv", "")
+        for feature in tmpDf.columns:
+            if feature != "Candidate":
+                cleanBiden = str(tmpDf[feature][0]).replace("%", "")
+                cleanTrump = str(tmpDf[feature][1]).replace("%", "")
+                
+                biden = int(cleanBiden) - int(cleanTrump)
+            # trump = int(cleanTrump) - int(cleanBiden)
+                amount = []
+                if  biden > 0:
+                    for i in range(len(tmpDf[feature].index)):
+                        amount.append(0)
+                        st.write(0)
+                else:
+                    for i in range(len(tmpDf[feature].index)):
+                        amount.append(1)
+
+                tmpDf[feature] = amount
+                df[feature] = amount
+                st.table(tmpDf)
+        
+        df2 = np.array(tmpDf)
+        labels = np.array(tmpDf.columns)
+        # try:
+        #     train_features, test_features, train_labels, test_labels = train_test_split(
+        #         df2, labels, test_size=0.25, random_state=42
+        #     )
+        # except:
+        #     print(1)
+        feature_list = [i for i in list(tmpDf.columns) if i != "Candidate"]
+        
+    
+        
+        # st.table(tmpDf)
+        # st.write(labels)
+   
+   # st.table(df)
+        #train_model(tmpDf[feature_list], labels, tmpDf[feature_list], df2, title)
+    
+df.to_csv("./data/Main.csv")
     
     
 
