@@ -1,15 +1,15 @@
-import sklearn as sk
+# import sklearn as sk
 import pickle
 import streamlit as st
 import glob
 import pandas as pd
-def load_classifier_model():
-    # import_dir = "./models/View of Mike Pence:.sav"
-    import_dir = "./models/Age.sav"
-    model = pickle.load(open(import_dir, "rb"))
-    return model
+# def load_classifier_model():
+#     # import_dir = "./models/View of Mike Pence:.sav"
+#     import_dir = "./models/Age.sav"
+#     model = pickle.load(open(import_dir, "rb"))
+#     return model
 
-class_model = load_classifier_model()
+# class_model = load_classifier_model()
 tmpDf = pd.read_csv("./data/Age.csv")
 tmpDf = tmpDf.drop(columns=["Unnamed: 0"])
 tmpDf["Candidate"] = [
@@ -28,24 +28,24 @@ if age < 40:
 if age > 50:
     candidate += 0.3
 
-tmpDf = pd.read_csv("./data/Religion.csv")
-tmpDf = tmpDf.drop(columns=["Unnamed: 0"])
-tmpDf["Candidate"] = [
-    1 if item == "Trump" else 0 for item in list(tmpDf["Candidate"])
-]
-st.table(tmpDf)
+# tmpDf = pd.read_csv("./data/Religion.csv")
+# tmpDf = tmpDf.drop(columns=["Unnamed: 0"])
+# tmpDf["Candidate"] = [
+#     1 if item == "Trump" else 0 for item in list(tmpDf["Candidate"])
+# ]
+# st.table(tmpDf)
 
-col1, col2, col3, col4 = st.columns(4)
-christan = col1.button("Christan")
-catholic = col2.button("Catholic")
-jewish = col3.button("Jewish")
-none = col4.button("None")
+# col1, col2, col3, col4 = st.columns(4)
+# christan = col1.button("Christan")
+# catholic = col2.button("Catholic")
+# jewish = col3.button("Jewish")
+# none = col4.button("None")
 
 
-if christan:
-    candidate += 0.5
-if catholic:
-    candidate -= 0.2
+# if christan:
+#     candidate += 0.5
+# if catholic:
+#     candidate -= 0.2
 
 # age2 = st.slider("Older than 45")
 # fav = st.slider("Pence is Favorable")
