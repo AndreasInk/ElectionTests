@@ -15,18 +15,18 @@ tmpDf = tmpDf.drop(columns=["Unnamed: 0"])
 tmpDf["Candidate"] = [
     1 if item == "Trump" else 0 for item in list(tmpDf["Candidate"])
 ]
-st.table(tmpDf)
-age = st.slider("Age", key="Age")
+# st.table(tmpDf)
+# age = st.slider("Age", key="Age")
 candidate = 0
-if age > 40 and age < 50:
-    distanceToCenter = age - 45
-    if distanceToCenter != 0:
-        candidate += 0.5/distanceToCenter
-if age < 40:
-    candidate -= 0.5
+# if age > 40 and age < 50:
+#     distanceToCenter = age - 45
+#     if distanceToCenter != 0:
+#         candidate += 0.5/distanceToCenter
+# if age < 40:
+#     candidate -= 0.5
 
-if age > 50:
-    candidate += 0.3
+# if age > 50:
+#     candidate += 0.3
 
 # tmpDf = pd.read_csv("./data/Religion.csv")
 # tmpDf = tmpDf.drop(columns=["Unnamed: 0"])
@@ -94,7 +94,7 @@ for location in locations:
             else:
                 tmpDf[feature] = 0
         op1 = st.selectbox(title, options=tmpDf.columns)
-        st.write(tmpDf[op1])
+        #st.write(tmpDf[op1])
         candidate += tmpDf[op1][0]
                 #df[feature] = amount
         #st.table(tmpDf)
@@ -110,4 +110,6 @@ for location in locations:
         # feature_list = [i for i in list(tmpDf.columns) if i != "Candidate"]
 
 # st.write("Trump" if candidate > 0 else "Biden")
-st.header(candidate)
+# st.header(candidate)
+st.sidebar.header("Output")
+st.sidebar.subheader(candidate)
