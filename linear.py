@@ -56,7 +56,7 @@ candidate = 0
 path = "./data"
 locations = glob.glob(path + "/*.csv")
 
-
+count = 1
 for location in locations:
     if "Main" not in location:
         tmpDf = pd.read_csv(location)
@@ -68,7 +68,8 @@ for location in locations:
         ]
         title = location.replace("./data/", "").replace(".csv", "")
         #st.header(title)
-        st.table(tmpDf)
+       
+           
         
         
         withoutCandidate = [] 
@@ -93,9 +94,12 @@ for location in locations:
         
             else:
                 tmpDf[feature] = 0
-        op1 = st.selectbox(title, options=tmpDf.columns)
+        st.header(str(count) + ") " + title)
+        st.expander("Show Table").table(tmpDf)
+        op1 = st.selectbox("", options=tmpDf.columns, key=title)
         #st.write(tmpDf[op1])
         candidate += tmpDf[op1][0]
+        count += 1
                 #df[feature] = amount
         #st.table(tmpDf)
         
