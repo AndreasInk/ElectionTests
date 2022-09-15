@@ -3,7 +3,5 @@ from linear import showData
 
 if 'score' not in st.session_state:
     st.session_state['score'] = 0
-    
-st.title("Social")
-showData("./data/social")
-
+st.title("Other")
+showData("./data/other")
